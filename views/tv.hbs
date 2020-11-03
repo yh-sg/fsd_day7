@@ -1,13 +1,23 @@
-        <div>ID: {{tv.tvid}}</div>
-        <div>NAME: {{tv.name}}</div>
-        <div>Language: {{tv.lang}}</div>
-        <div>Rating: {{tv.rating}}</div>
-        <div>Summary: {{tv.summary}}</div>
-        <br>
-        <img src="{{tv.image}}" alt="" class="img-fluid">
+        <div class="row">
+            <div class="col-4">
+                        <img src="{{tv.image}}" alt="" class="img-fluid">
+            </div>
+            <div class="col-8">
+                        <div>ID: {{tv.tvid}}</div>
+                    <div>NAME: {{tv.name}}</div>
+                    <div>Language: {{tv.lang}}</div>
+                    <div>Rating: {{tv.rating}}</div>
+                    <div>Summary: {{tv.summary}}</div>
+            </div>
+        </div>
 
-        <a href="{{tv.official_site}}"><h4>Go to official website</h4></a>
-        <a href="/">Back</a>
+        <br>
+
+        <div class="d-flex flex-row bd-highlight mb-3 justify-content-between">
+            <a href="{{tv.official_site}}" class="btn btn-success">Go to official website</a>
+            <a href="/" class="btn btn-warning">Back</a>
+        </div>
+
 
 
 

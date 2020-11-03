@@ -73,10 +73,21 @@ app.get('/:tvId',async(req,res)=>{
     try {
         const result = await conn.query(SQL_GET_TVSHOW_BY_APPID, [tvId])
         const recs = result[0];
-        console.log(recs[0]);
-        res.status(200)
-        res.type('text/html')
-        res.render('tv',{tv: recs[0]})
+        
+            res.format({
+                'text/html' : () => {
+                    res.type('text/html')
+                    res.render('tv',{tv:recs[0]})
+                },
+                'application/json': () => {
+                    res.type('application/json')
+                    res.json(recs[0])
+                },
+                'default': () => {
+                    res.type('text/plain')
+                    res.send(JSON.stringify(recs[0]))
+                }
+            })
     } catch (e) {
         res.status(500)
         res.type('text/html')
