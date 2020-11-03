@@ -1,1 +1,5 @@
-<h2>I am index</h2>
+{{#each tv}}
+<li>
+    <a href="/{{this.tvid}}">{{this.name}}</a>
+</li>
+{{/each}}

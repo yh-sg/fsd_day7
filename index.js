@@ -6,6 +6,10 @@ const mysql = require('mysql2/promise')
 //config PORT
 const PORT = parseInt(process.argv[2]) || parseInt(process.env.PORT) || 3000
 
+//SQL
+const SQL_FIND_TVSHOWS = 'select * from tv_shows ORDER BY name DESC limit ?';
+const SQL_GET_TVSHOW_BY_APPID = 'select * from tv_shows where tvid = ?'
+
 // configure connection pool
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
@@ -43,10 +47,44 @@ const startApp = async(app,pool) => {
     }
 }
 
-app.get('/',(req,res)=>{
-    res.status(200)
-    res.type('text/html')
-    res.render('index')
+app.get('/',async(req,res)=>{
+    const conn = await pool.getConnection()
+
+    try {
+        const result = await conn.query(SQL_FIND_TVSHOWS, [20])
+        // console.log(result[0]);
+        res.status(200)
+        res.type('text/html')
+        res.render('index',{tv: result[0]})
+    }catch(e){
+        res.status(500)
+        res.type('text/html')
+        res.send(JSON.stringify(e))
+        return
+    }finally {
+        conn.release()
+    }
+})
+
+app.get('/:tvId',async(req,res)=>{
+    const tvId = req.params['tvId'];
+
+    const conn = await pool.getConnection();
+    try {
+        const result = await conn.query(SQL_GET_TVSHOW_BY_APPID, [tvId])
+        const recs = result[0];
+        console.log(recs[0]);
+        res.status(200)
+        res.type('text/html')
+        res.render('tv',{tv: recs[0]})
+    } catch (e) {
+        res.status(500)
+        res.type('text/html')
+        res.send(JSON.stringify(e))
+        return
+    } finally {
+        conn.release()
+    }
 })
 
 startApp(app, pool);
